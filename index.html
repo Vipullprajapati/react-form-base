@@ -33,44 +33,60 @@
       const rootEl = document.querySelector("#app");
       const root = ReactDOM.createRoot(rootEl);
 
-      function Header({ children, bgColor = "green" }) {
-        const BackgroundOptions = {
-          light: "bg-zink-200",
-          dark: "bg-dark-200",
+      function Header({ children, bgColor = "light" }) {
+        const backgroundOptions = {
+          light: "bg-zinc-200",
+          blue: "bg-blue-200",
           green: "bg-green-200",
           red: "bg-red-200",
         };
 
         return (
           <header
-            className={`${BackgroundOptions[bgColor]} px-8 py-6 border-b`}
+            className={`${backgroundOptions[bgColor]} px-8 py-6 border-b`}
           >
             <h1 className="text-2xl font-semibold">{children}</h1>
           </header>
         );
       }
 
-      function Counter() {
+      function Counter({ handleChange }) {
         let [counter, setCounter] = React.useState(0);
+
+        function handleClick(operation = "+") {
+          if (operation === "+") {
+            setCounter((prevValue) => {
+              handleChange(prevValue + 1);
+              return prevValue + 1;
+            });
+
+            return;
+          }
+
+          setCounter((prevValue) => {
+            handleChange(prevValue - 1);
+            return prevValue - 1;
+          });
+        }
 
         return (
           <React.Fragment>
             <div className="flex text-6xl border border-zinc-600 w-fit p-2 gap-3 rounded-lg mb-3">
               <button
                 className="bg-blue-300 rounded-sm"
-                onClick={() => setCounter((preVal) => preVal - 1)}
+                onClick={() => handleClick("-")}
+                disabled={counter === 0}
               >
                 -
               </button>
               <p>{counter}</p>
               <button
                 className="bg-blue-300 rounded-sm"
-                onClick={() => setCounter((preVal) => preVal + 1)}
+                onClick={() => handleClick("+")}
               >
                 +
               </button>
             </div>
-            <Grid limit={counter} />
           </React.Fragment>
         );
       }
@@ -119,6 +135,12 @@
       }
 
       function Main() {
+        const [size, setSize] = React.useState(0);
+
+        function handleChange(value) {
+          setSize(value);
+        }
+
         return (
           <main className="px-8 py-6 container">
             <h2 className="text-xl font-bold mb-3">Why? 🤔</h2>
@@ -129,8 +151,8 @@
                 package.json
               </code>
             </p>
-            <Counter />
-            {/* <Grid limit={3} /> */}
+            <Counter handleChange={handleChange} />
+            <Grid limit={size} />
           </main>
         );
       }
