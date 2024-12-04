@@ -54,18 +54,10 @@
         let [counter, setCounter] = React.useState(0);
 
         function handleClick(operation = "+") {
-          if (operation === "+") {
-            setCounter((prevValue) => {
-              handleChange(prevValue + 1);
-              return prevValue + 1;
-            });
-
-            return;
-          }
-
           setCounter((prevValue) => {
-            handleChange(prevValue - 1);
-            return prevValue - 1;
+            let newValue = operation === "+" ? prevValue + 1 : prevValue - 1;
+            handleChange(newValue);
+            return newValue;
           });
         }
 
