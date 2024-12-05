@@ -84,32 +84,22 @@
       }
 
       function Grid({ limit = 1 }) {
-        const data = [
-          {
-            id: 1,
-            name: "React",
-            description: "A JavaScript library for building user interfaces",
-          },
-          {
-            id: 2,
-            name: "Angular",
-            description:
-              "A TypeScript-based open-source front-end web framework",
-          },
-          {
-            id: 3,
-            name: "Vue",
-            description:
-              "A progressive JavaScript framework for building user interfaces",
-          },
-          {
-            id: 4,
-            name: "Svelte",
-            description: "A compiler for building user interfaces",
-          },
-        ];
+        const [data, setData] = React.useState([]);
+        const [click, setClick] = React.useState(false);
+
+        React.useEffect(() => {
+          fetch("https://dummyjson.com/product")
+            .then((res) => res.json())
+            .then((data) => {
+              console.log(data.products);
+              setData(data.products);
+            });
+        }, [click]);
+
+        
 
         return (
+          
           <div className="flex flex-wrap gap-4">
             {data.slice(0, limit < 0 ? 0 : limit).map((currentObj) => {
               return (
@@ -117,7 +107,9 @@
                   key={currentObj.id}
                   className="border border-zinc-800 rounded-lg p-4 w-48"
                 >
-                  <h2 className="text-2xl font-bold mb-2">{currentObj.name}</h2>
+                  <h2 className="text-2xl font-bold mb-2">
+                    {currentObj.title}
+                  </h2>
                   <p>{currentObj.description}</p>
                 </div>
               );
