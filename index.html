@@ -88,29 +88,33 @@
         const [click, setClick] = React.useState(false);
 
         React.useEffect(() => {
-          fetch("https://dummyjson.com/product")
+          fetch(
+            "https://cdn.jsdelivr.net/gh/gliese-sketch/bbt-cars-inventory@refs/heads/main/src/data.json"
+          )
             .then((res) => res.json())
             .then((data) => {
-              console.log(data.products);
-              setData(data.products);
+              console.log(data);
+              setData(data);
             });
         }, [click]);
 
-        
-
         return (
-          
           <div className="flex flex-wrap gap-4">
             {data.slice(0, limit < 0 ? 0 : limit).map((currentObj) => {
+              const price = currentObj.price;
+              const priceFormatted = price.toLocaleString("en-US", {
+                style: "currency",
+                currency: "INR",
+              });
               return (
                 <div
                   key={currentObj.id}
                   className="border border-zinc-800 rounded-lg p-4 w-48"
                 >
-                  <h2 className="text-2xl font-bold mb-2">
-                    {currentObj.title}
-                  </h2>
+                  <h2 className="text-2xl font-bold mb-2">{currentObj.name}</h2>
+                  <img src={currentObj.img} alt={currentObj.name} />
                   <p>{currentObj.description}</p>
+                  <p>Price: {priceFormatted}</p>
                 </div>
               );
             })}
